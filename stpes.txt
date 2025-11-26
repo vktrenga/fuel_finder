@@ -7,6 +7,15 @@ python manage.py runserver
 Setup env and add connection
 python manage.py makemigrations
 python manage.py migrate
+Create APP 
+python manage.py startapp fuel_finder_app
+add in setting
+config url for & create a sample test api
+create a middleware
+create superAdminuser
+create models
+migrate models
+add inital data for basic models 
 crete model and register 
 
 
