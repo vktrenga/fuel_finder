@@ -1,0 +1,12 @@
+ python -m venv oliyaVenv
+ .\oliyaVenv\Scripts\activate  (For Activate env)
+python -m pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+django-admin startproject fuel_finder
+python manage.py runserver
+Setup env and add connection
+python manage.py makemigrations
+python manage.py migrate
+crete model and register 
+
+

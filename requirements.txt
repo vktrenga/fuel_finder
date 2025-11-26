@@ -1,0 +1,7 @@
+Django>=4.2,<5.0
+djangorestframework>=3.16,<4.0
+psycopg2-binary>=2.9       # PostgreSQL
+python-dotenv>=1.0          # Environment variables
+djangorestframework-simplejwt==5.5.1  # JWT auth
+django-cors-headers>=4.0  
+Pillow>=10.0                # Image handling
