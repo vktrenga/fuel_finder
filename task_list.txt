@@ -1,0 +1,37 @@
+Django Task FuelFinder Backend
+
+Model List
+Setting
+	Fuel Types
+	Amenities
+	Cities
+
+	Fuel Station 
+	Station Services ( Petrol/ Diesel)
+	Station Prices (Fuel Services Fk )
+	Station Amenities
+	Station Timing
+    Alert Categories
+    User Profile
+    Alert Setting   
+    Alert List 
+
+Task 
+   Should fetch the Fuel Station & Fuel Station Details with Services & Prices & Amenities 
+   Should fetch the near by fuel station with filter by services & Amenities
+   Should create a cronjob for update price
+   Should create a cronjob for add the alerts for specific user 
+   Should provide openAPI 3 options for API documentations
+   Should create a logger middleware
+   should Initial seed data script for Settings,Fuel Stations with services, Prices and Amenities
+   Should create Status API 
+
+Steps
+    Create the Django Project
+    Add Database
+    Add DRF
+    Create A test api URL
+    Add middleware (Logger & Response Format)
+    Add Superuser
+    Enable Admin And add Setting Models & Station related Model
+    
