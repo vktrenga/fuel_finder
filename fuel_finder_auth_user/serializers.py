@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
+from fuel_finder_auth_user.models import UserProfile
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)  # Confirm password
@@ -24,3 +26,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.is_active = True  # Activate user upon registration
         user.save()
         return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['address', 'gender', 'latitude', 'longitude']
