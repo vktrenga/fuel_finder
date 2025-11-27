@@ -113,22 +113,19 @@ def create_users():
         # Create User Profile 
         cities = cities_list()
         city_info = random.choice(cities)
-        profile, _ = UserProfile.objects.get_or_create(user=user)
-        serializer = UserProfileSerializer(profile, data={
-            "address": f"123, {city_info['city']} Street",
-            "latitude": city_info['latitude'],
-            "longitude": city_info['longitude'],
-        }, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-
+        user_profile = UserProfile.objects.get(id=user.id)
+        user_profile.latitude = city_info['latitude'] + random.uniform(-0.1, 0.1)
+        user_profile.longitude = city_info['longitude'] + random.uniform(-0.1, 0.1)
+        user_profile.address = f"Some address in {city_info['city']}"  
+        user_profile.save()
+         # Create Alerts for User
         if random.choice([True, False]):  # 50% chance to create
             OpenCloseAlert.objects.create(
                 user=user,
                 notify_on_open=random.choice([True, False]),
                 notify_on_close=random.choice([True, False]),
                 is_active=True,
-                radius_km=random.choice([2.0, 5.0, 10.0]),
+                radius_km=random.choice([20.0, 40.0, 80.0]),
             )
         
         if random.choice([True, False]): 
@@ -138,7 +135,7 @@ def create_users():
                     fuel_type=fule_type,
                     is_active=True,
                     target_price=random.uniform(70.0, 100.0),
-                    radius_km=random.choice([2.0, 5.0, 10.0]),
+                    radius_km=random.choice([20.0, 40.0, 80.0]),
                 )
        
     print("All User Created Successfully!")

@@ -35,6 +35,8 @@ class FuelStationTimings(models.Model):
     day_of_week = models.IntegerField(choices=DAYS_OF_WEEK)
     open_time = models.TimeField(null=True, blank=True)
     close_time = models.TimeField(null=True, blank=True)
+    is_open = models.BooleanField(default=True)
+    last_updated = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = ('fuel_station', 'day_of_week')
     def __str__(self):
