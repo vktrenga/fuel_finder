@@ -8,7 +8,7 @@ import math
 from .serializers import StationDetailSerializer, StationListSerializer
 from .models import FuelStations,  FuelPrices
 from django.db.models.expressions import RawSQL
-
+from rest_framework.permissions import AllowAny
 
 def check_is_open(station):
     now = datetime.now()
@@ -24,6 +24,7 @@ def check_is_open(station):
     return timings.open_time <= now_time <= timings.close_time
 
 class StationDetailView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request, station_id):
         try:
             station = FuelStations.objects.select_related("city").prefetch_related(
@@ -79,6 +80,8 @@ class StationDetailView(APIView):
         return Response(serializer.data, status=200)
 
 class StationListView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         qs = (
             FuelStations.objects
@@ -96,7 +99,7 @@ class StationListView(APIView):
         )
 
         # -------------------
-        # 🧭 DISTANCE ORDERING
+        #  DISTANCE ORDERING
         # -------------------
         user_lat = request.GET.get("lat")
         user_lng = request.GET.get("lng")
@@ -107,9 +110,9 @@ class StationListView(APIView):
 
             haversine = """
                 6371 * acos(
-                    cos(radians(%s)) * cos(radians(latitude)) *
-                    cos(radians(longitude) - radians(%s)) +
-                    sin(radians(%s)) * sin(radians(latitude))
+                    cos(radians(%s)) * cos(radians(fuel_finder_app_fuelstations.latitude)) *
+                    cos(radians(fuel_finder_app_fuelstations.longitude) - radians(%s)) +
+                    sin(radians(%s)) * sin(radians(fuel_finder_app_fuelstations.latitude))
                 )
             """
 
@@ -130,16 +133,16 @@ class StationListView(APIView):
                     qs = qs.order_by("distance")
 
         # -------------------
-        # 🔍 FILTERS
+        #  FILTERS
         # -------------------
 
-        # 1️⃣ Fuel type filter: ?fuel=Petrol,Diesel
+        # Fuel type filter: ?fuel=Petrol,Diesel
         fuel_param = request.GET.get("fuel")
         if fuel_param:
             fuel_list = [f.strip() for f in fuel_param.split(",")]
             qs = qs.filter(fuel_types__name__in=fuel_list).distinct()
 
-        # 2️⃣ Price filter: ?min_price=100&max_price=120
+        #  Price filter: ?min_price=100&max_price=120
         min_price = request.GET.get("min_price")
         max_price = request.GET.get("max_price")
 
@@ -148,7 +151,7 @@ class StationListView(APIView):
         if max_price:
             qs = qs.filter(fuelprices_set__price_per_liter__lte=max_price)
 
-        # 3️⃣ City filters
+        #  City filters
         city = request.GET.get("city")
         city_id = request.GET.get("city_id")
 
@@ -157,14 +160,14 @@ class StationListView(APIView):
         if city_id:
             qs = qs.filter(city__id=city_id)
 
-        # 4️⃣ Open / Closed filter: ?is_open=true
+        # Open / Closed filter: ?is_open=true
         is_open = request.GET.get("is_open")
         if is_open in ["true", "false"]:
             flag = is_open == "true"
             qs = [s for s in qs if check_is_open(s) == flag]
 
         # -------------------
-        # 🔢 PAGINATION
+        #  PAGINATION
         # -------------------
         paginator = PageNumberPagination()
         paginator.page_size = 10
@@ -172,7 +175,7 @@ class StationListView(APIView):
         paginated_qs = paginator.paginate_queryset(qs, request)
 
         # -------------------
-        # 📌 Serialize Output
+        #  Serialize Output
         # -------------------
         stations = []
         for s in paginated_qs:
