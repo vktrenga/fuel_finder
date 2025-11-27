@@ -21,7 +21,6 @@ Task
    Should fetch the near by fuel station with filter by services & Amenities
    Should create a cronjob for update price
    Should create a cronjob for add the alerts for specific user 
-   Should provide openAPI 3 options for API documentations
    Should create a logger middlewarex
    should Initial seed data script for Settings,Fuel Stations with services, Prices and Amenities
    Should create Status API 
