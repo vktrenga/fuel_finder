@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'fuel_finder.middleware.logging_middleware.APILoggerMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
     
 ]
 
@@ -103,6 +104,18 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST', default='db'),  # <- must match docker-compose service name
+#         'PORT': config('DB_PORT', default=5432, cast=int),
+#     }
+# }
 
 
 # Logging Configuration
@@ -176,8 +189,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # optional if you have local static/
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
