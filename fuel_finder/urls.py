@@ -18,5 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('fuel_finder_app/', include('fuel_finder_app.urls'))
+    path('fuel_finder_app/', include('fuel_finder_app.urls')),
+    path('auth/', include('fuel_finder_auth_user.urls'))
+
 ]
