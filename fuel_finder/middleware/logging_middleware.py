@@ -33,15 +33,15 @@ class APILoggerMiddleware:
 
         execution_time = round(time.time() - start_time, 4)
 
-        try:
-            response_data = response.content.decode("utf-8")
-        except:
-            response_data = "Non-JSON Response"
+        # try:
+        #     response_data = response.content.decode("utf-8")
+        # except:
+        #     response_data = "Non-JSON Response"
 
         logger.info(
             f"[RESPONSE] {method} {path} | "
             f"Status={response.status_code} | "
-            f"Time={execution_time}s | Response={response_data}"
+            f"Time={execution_time}s"
         )
 
         return response
