@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django_extensions',
     'fuel_finder_app',
     'fuel_finder_auth_user',
     'fuel_finder_alert',
