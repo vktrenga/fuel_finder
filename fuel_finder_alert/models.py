@@ -31,7 +31,9 @@ class PriceDropAlert(models.Model):
 class StationAlertHistory(models.Model):
     ALERT_TYPE_CHOICES = (
         ("price", "Price Alert"),
-        ("open_close", "Open/Close Alert"),
+        ("open", "Open"),
+        ("close", "Close"),
+
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     station = models.ForeignKey(FuelStations, on_delete=models.CASCADE)
