@@ -1,5 +1,5 @@
 
-from fuel_finder_app.scripts.cites import cities_list, create_superuser, random_coordinates
+from fuel_finder_app.scripts.helper import cities_list, create_superuser, create_users, random_coordinates
 from  ..models import FuelTypes, Amenities, Cities, FuelStations, FuelPrices, FuelStationTimings
 from django.utils import timezone
 from random import choice, uniform, sample
@@ -95,3 +95,7 @@ def run():
                     }
                 )
     print("Initial fuel stations, fuel types, amenities, prices, and timings created successfully!")
+    create_users()
+    ("Initial Users & Alerts created successfully!")
+    # Create users   from fuel_finder_auth_user.scripts.initial_data import run as create_users
+        
