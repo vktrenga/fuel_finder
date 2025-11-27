@@ -56,7 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'fuel_finder.middleware.logging_middleware.APILoggerMiddleware'
+    'fuel_finder.middleware.logging_middleware.APILoggerMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'fuel_finder.urls'
@@ -135,6 +136,8 @@ REST_FRAMEWORK = {
      "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    'EXCEPTION_HANDLER': 'fuel_finder.middleware.error_middleware.custom_exception_handler'
+
 }
 
 # Password validation
