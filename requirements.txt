@@ -7,3 +7,5 @@ django-cors-headers>=4.0
 Pillow>=10.0                # Image handling
 django-extensions
 apscheduler
+gunicorn
+whitenoise
