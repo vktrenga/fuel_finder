@@ -7,9 +7,11 @@ from django.utils.timezone import now
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from system_status.serializers import SystemStatusDataSerializer
 from system_status.uptime import get_uptime
 from fuel_finder_app.models import FuelStations
 from fuel_finder_alert.models import StationAlertHistory
+from drf_spectacular.utils import extend_schema
 
 # Global request history for rate monitoring
 REQUEST_HISTORY = deque(maxlen=5000)
@@ -24,6 +26,9 @@ class StatusView(APIView):
         REQUEST_HISTORY.append(time.time())
         return super().initial(request, *args, **kwargs)
 
+    @extend_schema(
+        responses=SystemStatusDataSerializer
+    )
     def get(self, request):
 
         # CPU usage % (average over 0.5 sec)
@@ -87,4 +92,4 @@ class StatusView(APIView):
             "version": "v1.0.1"
         }
 
-        return Response(data)
+        return Response(SystemStatusDataSerializer(data).data)
