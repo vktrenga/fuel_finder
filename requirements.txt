@@ -11,3 +11,4 @@ gunicorn
 whitenoise
 drf-spectacular 
 drf-spectacular-sidecar
+psutil

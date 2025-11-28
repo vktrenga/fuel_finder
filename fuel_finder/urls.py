@@ -23,6 +23,7 @@ urlpatterns = [
     path('fuel_finder_app/', include('fuel_finder_app.urls')),
     path('auth/', include('fuel_finder_auth_user.urls')),
     path('alert/', include('fuel_finder_alert.urls')),
+    path('core/', include('core.urls')),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger"),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
