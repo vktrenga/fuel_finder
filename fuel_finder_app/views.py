@@ -28,7 +28,9 @@ def check_is_open(station):
 
 class StationDetailView(APIView):
     permission_classes = [AllowAny]
- 
+    @extend_schema(
+    responses=StationDetailSerializer
+    )
     def get(self, request, station_id):
         try:
             station = FuelStations.objects.select_related("city").prefetch_related(

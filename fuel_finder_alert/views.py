@@ -1,4 +1,3 @@
-from rest_framework import generics
 from .models import OpenCloseAlert, PriceDropAlert, StationAlertHistory
 from .serializers import OpenCloseAlertSerializer, PriceDropAlertSerializer, StationAlertHistorySerializer
 from rest_framework.permissions import IsAuthenticated
@@ -6,10 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-
-
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from fuel_finder_alert.models import StationAlertHistory
@@ -22,7 +18,9 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class StationAlertHistoryListView(APIView):
     pagination_class = StandardResultsSetPagination
-
+    @extend_schema(
+    responses=StationAlertHistorySerializer(many=True)
+    )
     def get(self, request):
         user = request.user
         queryset = StationAlertHistory.objects.filter(user=user).order_by('-triggered_at')
