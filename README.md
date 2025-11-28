@@ -315,3 +315,5 @@ The project includes automatic API documentation generated using DRF-Spectacular
 
 
 
+https://www.loom.com/share/76ce567f078f477f9fd7e9e60efc8cf3
+

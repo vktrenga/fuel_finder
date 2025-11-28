@@ -1,5 +1,6 @@
 import json
 import time
+import datetime
 import logging
 
 logger = logging.getLogger("api_logger")
@@ -41,7 +42,8 @@ class APILoggerMiddleware:
         logger.info(
             f"[RESPONSE] {method} {path} | "
             f"Status={response.status_code} | "
-            f"Time={execution_time}s"
+            f"ExecutionTime={execution_time}s"
+            f"TimeStamp={datetime.now()}s"
         )
 
         return response
