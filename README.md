@@ -1,13 +1,19 @@
 ## Project Structure
+```bash
 fuel_finder/
-├── fuel_finder_app/         # core app code
-├── fuel_finder_alert/       # alert / notification module
-├── fuel_finder_auth_user/   # auth / user management
-├── .env_sample              # sample environment variables
-├── requirements.txt
-├── manage.py                # main script / entrypoint
-├── README.md                # this file
-└── (other helper files/modules)
+├── fuel_finder_app/          # Core app code
+│   ├── management/           # Custom Django management commands
+│   └── scripts/              # Helper scripts (e.g., initial_data.py)
+├── fuel_finder_alert/        # Alert / notification module
+│   └── cron/                 # Scheduled tasks / cron jobs
+├── fuel_finder_auth_user/    # Authentication / user management module
+├── .env_sample               # Sample environment variables
+├── requirements.txt          # Python dependencies
+├── manage.py                 # Django management script / entrypoint
+├── README.md                 # Project documentation
+└── (other helper files/modules) # Utilities, config files, etc.
+
+```
 
 ## Features
 
