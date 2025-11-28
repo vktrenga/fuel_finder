@@ -159,7 +159,7 @@ docker-compose exec web python manage.py collectstatic --noinput
 | ---------------------------- | --------------------------------- | ------------------------------ |
 | **rest_framework**           | Build APIs in Django              | All API development            |
 | **rest_framework_simplejwt** | JWT authentication                | Secure login, token-based auth |
-| **django_extensions**        | Developer utilities               | Local development, debugging   |
+| **django_extensions**        | Developer utilities               | Run scripts
 | **drf_spectacular**          | API documentation auto-generation | Creating Swagger/OpenAPI docs  |
 | **drf_spectacular_sidecar**  | Local API documentation assets    | Offline Swagger/Redoc support  |
 
