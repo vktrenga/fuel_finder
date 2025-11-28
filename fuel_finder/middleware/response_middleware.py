@@ -4,7 +4,17 @@ from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 
 class StandardResponseMiddleware(MiddlewareMixin):
+    EXCLUDE_PATHS = [
+        "/api/schema",
+        "/api/docs",
+        "/api/redoc",
+    ]
+     
     def process_response(self, request, response):
+        for path in self.EXCLUDE_PATHS:
+            if request.path.startswith(path):
+                return response
+
         # Skip non-JSON responses (like file downloads)
         if not hasattr(response, "data"):
             return response
