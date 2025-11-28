@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from core.uptime import get_uptime
+from system_status.uptime import get_uptime
 from fuel_finder_app.models import FuelStations
 from fuel_finder_alert.models import StationAlertHistory
 

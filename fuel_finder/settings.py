@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'fuel_finder_app',
     'fuel_finder_auth_user',
     'fuel_finder_alert',
-    'core',
+    'system_status',
     
 ]
 
