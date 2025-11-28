@@ -151,7 +151,7 @@ python manage.py runscript initial_data
  python manage.py truncate_db
 ```
 
-## ▶️ 6. Run the Project Locally
+## 6. Run the Project Locally
 
 ```bash
 python manage.py runserver
@@ -165,15 +165,15 @@ python manage.py collectstatic
 
 ---
 
-# 🐳 Docker Setup
+#  Docker Setup
 
-## 📦 1. Build Docker Images
+##  1. Build Docker Images
 
 ```bash
 docker-compose build
 ```
 
-## ▶️ 2. Start Containers
+##  2. Start Containers
 
 ```bash
 docker-compose up
@@ -185,7 +185,7 @@ Run in background:
 docker-compose up -d
 ```
 
-## 🛑 5. Stop Containers
+##  5. Stop Containers
 
 ```bash
 docker-compose down
