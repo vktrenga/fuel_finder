@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_extensions',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
     'fuel_finder_app',
     'fuel_finder_auth_user',
     'fuel_finder_alert',
@@ -150,10 +152,15 @@ REST_FRAMEWORK = {
      "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-    'EXCEPTION_HANDLER': 'fuel_finder.middleware.error_middleware.custom_exception_handler'
+    'EXCEPTION_HANDLER': 'fuel_finder.middleware.error_middleware.custom_exception_handler',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 
 }
-
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Fuel Finder API",
+    "DESCRIPTION": "API Documentation for Fuel Finder Backend",
+    "VERSION": "1.0.0",
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

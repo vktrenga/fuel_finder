@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from drf_spectacular.utils import extend_schema
 
 
 class StationAlertHistoryListView(generics.ListAPIView):
@@ -26,6 +27,11 @@ class StationAlertHistoryListView(generics.ListAPIView):
     
 class OpenCloseAlertViews(APIView):
     permission_classes = [IsAuthenticated]
+    
+    @extend_schema(
+        request=OpenCloseAlertSerializer,
+        responses=OpenCloseAlertSerializer
+    )
     def post(self, request):
         """Update or create user open/close alert settings"""
         open_close_alert_setting, created = OpenCloseAlert.objects.get_or_create(user=request.user)
@@ -39,7 +45,10 @@ class OpenCloseAlertViews(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else :
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+    
+    @extend_schema(
+        responses=OpenCloseAlertSerializer
+    )
     def get(self, request):
         open_close_alert_setting = OpenCloseAlert.objects.get(user=request.user)
         serializer = OpenCloseAlertSerializer(open_close_alert_setting)
@@ -48,6 +57,10 @@ class OpenCloseAlertViews(APIView):
 
 class PriceDropAlertViews(APIView):
     permission_classes = [IsAuthenticated]
+    @extend_schema(
+        request=PriceDropAlertSerializer,
+        responses=PriceDropAlertSerializer
+    )
     def post(self, request):
         """Update or create user Price Drop alert settings"""
         price_drop_alert_setting, created = PriceDropAlert.objects.get_or_create(user=request.user, fuel_type_id=request.data.get("fuel_type"))
@@ -59,6 +72,10 @@ class PriceDropAlertViews(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @extend_schema(
+        responses=PriceDropAlertSerializer(many=True)
+    )
     def get(self, request):
         price_drop_alert_setting = PriceDropAlert.objects.filter(user=request.user)
         serializer = PriceDropAlertSerializer(price_drop_alert_setting, many=True)

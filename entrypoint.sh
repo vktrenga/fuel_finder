@@ -17,6 +17,9 @@ python manage.py migrate --noinput
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
+# echo "Delete existing initial data..."
+# python manage.py truncate_db || echo "Delete existing initial data failed or not found"
+
 echo "Loading initial data..."
 python manage.py runscript initial_data || echo "Script failed or not found"
 

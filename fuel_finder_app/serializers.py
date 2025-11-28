@@ -13,6 +13,7 @@ class StationListSerializer(serializers.Serializer):
     longitude = serializers.FloatField()
     distance_km = serializers.FloatField(allow_null=True)
     is_open = serializers.BooleanField()
+    price =  PriceSerializer(many=True)
     last_price_update = serializers.DateTimeField(allow_null=True)
 
 

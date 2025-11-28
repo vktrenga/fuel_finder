@@ -75,6 +75,26 @@ fuel_finder/
 
 
 
+## Installed Packages & Purpose
+| Package                      | Purpose                           | When You Use It                |
+| ---------------------------- | --------------------------------- | ------------------------------ |
+| **rest_framework**           | Build APIs in Django              | All API development            |
+| **rest_framework_simplejwt** | JWT authentication                | Secure login, token-based auth |
+| **django_extensions**        | Developer utilities               | Local development, debugging   |
+| **drf_spectacular**          | API documentation auto-generation | Creating Swagger/OpenAPI docs  |
+| **drf_spectacular_sidecar**  | Local API documentation assets    | Offline Swagger/Redoc support  |
+
+
+## API Documentation
+
+The project includes automatic API documentation generated using DRF-Spectacular (OpenAPI 3).
+
+## Available API Docs
+| Type                      | URL            | Description                                          |
+| ------------------------- | -------------- | ---------------------------------------------------- |
+| **OpenAPI Schema (JSON)** | `/api/schema/` | The full OpenAPI 3 schema used by Swagger & ReDoc    |
+| **Swagger UI**            | `/api/docs/`   | Interactive API explorer with authentication support |
+| **ReDoc UI**              | `/api/redoc/`  | Clean, responsive API documentation for developers   |
 
 
 
@@ -162,7 +182,7 @@ python manage.py collectstatic
 ##  1. Build Docker Images
 
 ```bash
-docker-compose build
+docker-compose build --no-cache
 ```
 
 ##  2. Start Containers
@@ -189,4 +209,9 @@ Remove volumes ( deletes DB data!):
 docker-compose down -v
 ```
 
+truncate all existing data from db
 
+```bash
+docker compose up -d
+docker compose exec web python manage.py truncate_db
+```

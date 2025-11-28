@@ -9,3 +9,5 @@ django-extensions
 apscheduler
 gunicorn
 whitenoise
+drf-spectacular 
+drf-spectacular-sidecar
