@@ -83,12 +83,118 @@ fuel_finder/
   * Add new **alert types**
   * Extend APIs with extra fields
 
+
+
+
+# 📘 Project Setup Guide – Fuel Finder
+
+## 🔧 1. Create & Activate Virtual Environment (venv)
+
+### **Windows**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### **macOS / Linux**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
 ---
 
-If you want, I can **rewrite the full README** including this **Features section**, **installation**, **usage**, **project structure**, and **example API calls** — so it’s ready to drop into the repo.
+## ⚙️ 2. Environment Variables
 
-Do you want me to do that next?
+Create a `.env` file in the project root:
 
-docker-compose down -v
-docker-compose build --no-cache
+```
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=db
+DB_PORT=5432
+
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+POSTGRES_USER=
+DEBUG=True
+```
+
+---
+
+##  3. Database Setup (Local)
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+##  4. Initial data setup
+
+```bash
+python manage.py runscript initial_data
+
+```
+
+##  5. Truncate all data
+
+```bash
+ python manage.py truncate_db
+```
+
+## ▶️ 6. Run the Project Locally
+
+```bash
+python manage.py runserver
+```
+
+Static files (only when deploying):
+
+```bash
+python manage.py collectstatic
+```
+
+---
+
+# 🐳 Docker Setup
+
+## 📦 1. Build Docker Images
+
+```bash
+docker-compose build
+```
+
+## ▶️ 2. Start Containers
+
+```bash
 docker-compose up
+```
+
+Run in background:
+
+```bash
+docker-compose up -d
+```
+
+## 🛑 5. Stop Containers
+
+```bash
+docker-compose down
+```
+
+Remove volumes (⚠︎ deletes DB data!):
+
+```bash
+docker-compose down -v
+```
+
+
