@@ -2,6 +2,7 @@
 
 ```bash
 fuel_finder/
+├── system_status/            # System Status app (monitoring & /status/ endpoint)
 ├── fuel_finder_app/          # Core app code
 │   ├── management/           # Custom Django management commands
 │   └── scripts/              # Helper scripts (e.g., initial_data.py)
@@ -13,6 +14,124 @@ fuel_finder/
 ├── manage.py                 # Django management script / entrypoint
 ├── README.md                 # Project documentation
 └── (other helper files/modules) # Utilities, config files, etc.
+
+```
+# Project Setup Guide – Fuel Finder
+
+## 1. Create & Activate Virtual Environment (venv)
+
+### **Windows**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### **macOS / Linux**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 2. Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=db
+DB_PORT=5432
+
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+POSTGRES_USER=
+DEBUG=True
+```
+
+---
+
+##  3. Database Setup (Local)
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+##  4. Initial data setup
+
+```bash
+python manage.py runscript initial_data
+
+```
+
+##  5. Truncate all data
+
+```bash
+ python manage.py truncate_db
+```
+
+## 6. Run the Project Locally
+
+```bash
+python manage.py runserver
+```
+
+Static files (only when deploying):
+
+```bash
+python manage.py collectstatic
+```
+
+---
+
+#  Docker Setup
+
+##  1. Build Docker Images
+
+```bash
+docker-compose build --no-cache
+```
+
+##  2. Start Containers
+
+```bash
+docker-compose up
+```
+
+Run in background:
+
+```bash
+docker-compose up -d
+```
+
+##  3. Stop Containers
+
+```bash
+docker-compose down
+```
+
+Remove volumes ( deletes DB data!):
+
+```bash
+docker-compose down -v
+```
+
+truncate all existing data from db
+
+```bash
+docker compose up -d
+docker compose exec web python manage.py truncate_db
 ```
 
 ##  Django Admin
@@ -151,7 +270,25 @@ docker-compose exec web python manage.py collectstatic --noinput
 
   * Database connection
   
+### 9 System Status App
 
+* system_status/ – Dedicated app for monitoring system health
+
+Returns:
+
+Server uptime
+
+CPU and memory usage
+
+Database connectivity status
+
+Counts of fuel stations and alerts
+
+Last price and open/close alerts
+
+API request rate information (per-user & global)
+
+Uses psutil for resource metrics
 
 
 ## Installed Packages & Purpose
@@ -177,120 +314,6 @@ The project includes automatic API documentation generated using DRF-Spectacular
 
 
 
-# Project Setup Guide – Fuel Finder
 
-## 1. Create & Activate Virtual Environment (venv)
+https://www.loom.com/share/76ce567f078f477f9fd7e9e60efc8cf3
 
-### **Windows**
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### **macOS / Linux**
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### Install Requirements
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 2. Environment Variables
-
-Create a `.env` file in the project root:
-
-```
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-DB_HOST=db
-DB_PORT=5432
-
-POSTGRES_PASSWORD=
-POSTGRES_DB=
-POSTGRES_USER=
-DEBUG=True
-```
-
----
-
-##  3. Database Setup (Local)
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-##  4. Initial data setup
-
-```bash
-python manage.py runscript initial_data
-
-```
-
-##  5. Truncate all data
-
-```bash
- python manage.py truncate_db
-```
-
-## 6. Run the Project Locally
-
-```bash
-python manage.py runserver
-```
-
-Static files (only when deploying):
-
-```bash
-python manage.py collectstatic
-```
-
----
-
-#  Docker Setup
-
-##  1. Build Docker Images
-
-```bash
-docker-compose build --no-cache
-```
-
-##  2. Start Containers
-
-```bash
-docker-compose up
-```
-
-Run in background:
-
-```bash
-docker-compose up -d
-```
-
-##  3. Stop Containers
-
-```bash
-docker-compose down
-```
-
-Remove volumes ( deletes DB data!):
-
-```bash
-docker-compose down -v
-```
-
-truncate all existing data from db
-
-```bash
-docker compose up -d
-docker compose exec web python manage.py truncate_db
-```

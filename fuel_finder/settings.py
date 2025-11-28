@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'fuel_finder_app',
     'fuel_finder_auth_user',
     'fuel_finder_alert',
+    'system_status',
     
 ]
 
@@ -60,7 +61,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'fuel_finder.middleware.logging_middleware.APILoggerMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'fuel_finder.middleware.response_middleware.StandardResponseMiddleware',
     
 ]
 

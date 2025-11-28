@@ -68,12 +68,12 @@ def generate_open_close_alerts():
                 continue
             # Alert only for users within 20 km
             if distance <= getUserAlerts.first().radius_km:
-                status = "Close"
+                status = StationAlertHistory.CLOSE
                 print("radius_km", getUserAlerts.first().radius_km)
                 if is_open_now  and getUserAlerts.first().notify_on_open:
-                    status = "Open"
+                    status = StationAlertHistory.OPEN  # "Open"
                 if not is_open_now and getUserAlerts.first().notify_on_close:
-                    status = "Close"
+                    status = StationAlertHistory.CLOSE
                 # Insert alert history
                 alert = StationAlertHistory.objects.create(
                     user=userProfile.user,
@@ -119,7 +119,7 @@ def generate_price_drop_alerts():
            
             # Alert only for users within 20 km
             if distance <= user_price_alert.radius_km and fuel_price.price_per_liter <= user_price_alert.target_price:
-                status = "Price Drop"
+                status = StationAlertHistory.PRICE
                 # Insert alert history
                 alert = StationAlertHistory.objects.create(
                     user=userProfile.user,
