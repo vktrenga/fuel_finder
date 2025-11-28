@@ -1,4 +1,5 @@
 ## Project Structure
+
 ```bash
 fuel_finder/
 ├── fuel_finder_app/          # Core app code
@@ -12,8 +13,80 @@ fuel_finder/
 ├── manage.py                 # Django management script / entrypoint
 ├── README.md                 # Project documentation
 └── (other helper files/modules) # Utilities, config files, etc.
+```
+
+##  Django Admin
+
+### **Admin URL**
 
 ```
+http://localhost:8000/admin/
+```
+
+### **Default Superuser (from initial_data or setup)**
+
+| Username | Email                                         | Password |
+| -------- | --------------------------------------------- | -------- |
+| admin    | [admin@example.com](mailto:admin@example.com) | admin123 |
+
+
+---
+
+##  Sample User Accounts
+
+| Username | Email                                         | Password    | Role         |
+| -------- | --------------------------------------------- | ----------- | ------------ |
+| user1    | [user1@example.com](mailto:user1@example.com) | password123 | Regular user |
+| user2    | [user2@example.com](mailto:user2@example.com) | password123 | Regular user |
+
+> These users are for testing purposes upto 20 user
+
+---
+
+## 📄 API Documentation (Swagger / OpenAPI)
+
+| Type             | URL            | Description                        |
+| ---------------- | -------------- | ---------------------------------- |
+| **OpenAPI JSON** | `/api/schema/` | Full OpenAPI 3 schema              |
+| **Swagger UI**   | `/api/docs/`   | Interactive API explorer           |
+| **ReDoc UI**     | `/api/redoc/`  | Clean documentation for developers |
+
+**Example:**
+
+```
+Swagger: http://localhost:8000/api/docs/
+ReDoc:   http://localhost:8000/api/redoc/
+OpenAPI: http://localhost:8000/api/schema/
+```
+
+---
+
+## 🐳 Docker Notes
+
+* Start services:
+
+```bash
+docker-compose up -d
+```
+
+* Run management commands:
+
+```bash
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py truncate_db
+docker-compose exec web python manage.py runscript initial_data
+```
+
+* Collect static files for Swagger / ReDoc:
+
+```bash
+docker-compose exec web python manage.py collectstatic --noinput
+```
+
+---
+
+
 
 ## Features
 
