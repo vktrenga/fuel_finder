@@ -6,24 +6,40 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 
-class StationAlertHistoryListView(generics.ListAPIView):
-    serializer_class = StationAlertHistorySerializer
-    permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = self.request.user
-        queryset = StationAlertHistory.objects.filter(user=user)
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+from fuel_finder_alert.models import StationAlertHistory
+from fuel_finder_alert.serializers import StationAlertHistorySerializer
 
-        alert_type = self.request.query_params.get("alert_type")
-        station = self.request.query_params.get("station")
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class StationAlertHistoryListView(APIView):
+    pagination_class = StandardResultsSetPagination
+
+    def get(self, request):
+        user = request.user
+        queryset = StationAlertHistory.objects.filter(user=user).order_by('-triggered_at')
+
+        alert_type = request.query_params.get("alert_type")
+        station = request.query_params.get("station")
 
         if alert_type:
             queryset = queryset.filter(alert_type=alert_type)
         if station:
             queryset = queryset.filter(station_id=station)
 
-        return queryset
+        # Pagination
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(queryset, request)
+        serializer = StationAlertHistorySerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
 class OpenCloseAlertViews(APIView):
     permission_classes = [IsAuthenticated]
