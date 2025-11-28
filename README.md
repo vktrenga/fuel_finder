@@ -1,7 +1,5 @@
 ## Project Structure
 
-##  Project Structure
-
 ```bash
 fuel_finder/
 ├── fuel_finder_app/          # Core app code
