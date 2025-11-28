@@ -9,7 +9,7 @@ fuel_finder/
 ├── README.md                # this file
 └── (other helper files/modules)
 
-## 🚀 Features
+## Features
 
 ### 1. **User Authentication**
 
@@ -86,9 +86,9 @@ fuel_finder/
 
 
 
-# 📘 Project Setup Guide – Fuel Finder
+# Project Setup Guide – Fuel Finder
 
-## 🔧 1. Create & Activate Virtual Environment (venv)
+## 1. Create & Activate Virtual Environment (venv)
 
 ### **Windows**
 
@@ -112,7 +112,7 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ 2. Environment Variables
+## 2. Environment Variables
 
 Create a `.env` file in the project root:
 
@@ -185,13 +185,13 @@ Run in background:
 docker-compose up -d
 ```
 
-##  5. Stop Containers
+##  3. Stop Containers
 
 ```bash
 docker-compose down
 ```
 
-Remove volumes (⚠︎ deletes DB data!):
+Remove volumes ( deletes DB data!):
 
 ```bash
 docker-compose down -v
