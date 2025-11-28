@@ -14,7 +14,6 @@ fuel_finder/
 ### 1. **User Authentication**
 
 * Handles **user registration**, login, and token-based authentication (JWT).
-* Supports custom claims like `user_id` and `email` in tokens.
 * User profile management including optional fields like address, gender, and location (`lat`/`lng`).
 
 ### 2. **Fuel Station Management**
@@ -72,16 +71,9 @@ fuel_finder/
 * `.env_sample` for environment variables such as:
 
   * Database connection
-  * API keys (if any)
-  * Scheduler intervals
+  
 
-### 9. **Extensible Architecture**
 
-* Designed for easy extension:
-
-  * Add new **fuel types** or **amenities**
-  * Add new **alert types**
-  * Extend APIs with extra fields
 
 
 
