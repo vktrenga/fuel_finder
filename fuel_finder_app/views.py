@@ -5,10 +5,13 @@ from rest_framework.views import APIView
 from django.db.models import Prefetch, FloatField
 from datetime import datetime
 import math
+
+from fuel_finder_auth_user.models import UserProfile
 from .serializers import StationDetailSerializer, StationListSerializer
 from .models import FuelStations,  FuelPrices
 from django.db.models.expressions import RawSQL
 from rest_framework.permissions import AllowAny
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 def check_is_open(station):
     now = datetime.now()
@@ -25,6 +28,7 @@ def check_is_open(station):
 
 class StationDetailView(APIView):
     permission_classes = [AllowAny]
+ 
     def get(self, request, station_id):
         try:
             station = FuelStations.objects.select_related("city").prefetch_related(
@@ -81,7 +85,21 @@ class StationDetailView(APIView):
 
 class StationListView(APIView):
     permission_classes = [AllowAny]
-
+    @extend_schema(
+    parameters=[
+        OpenApiParameter(name='lat', type=float, location='query', description='User latitude'),
+        OpenApiParameter(name='lng', type=float, location='query', description='User longitude'),
+        OpenApiParameter(name='order', type=str, location='query', description='Order direction: asc or desc'),
+        OpenApiParameter(name='order_by', type=str, location='query', description='Order by field: distance'),
+        OpenApiParameter(name='fuel', type=str, location='query', description='Filter by fuel types, comma separated'),
+        OpenApiParameter(name='min_price', type=float, location='query', description='Minimum price filter'),
+        OpenApiParameter(name='max_price', type=float, location='query', description='Maximum price filter'),
+        OpenApiParameter(name='city', type=str, location='query', description='Filter by city name'), 
+        OpenApiParameter(name='city_id', type=int, location='query', description='Filter by city ID'),
+        OpenApiParameter(name='is_open', type=str, location='query', description='Filter by open status: true or false'),    
+    ],
+    responses=StationDetailSerializer(many=True)
+)
     def get(self, request):
         qs = (
             FuelStations.objects
@@ -101,9 +119,18 @@ class StationListView(APIView):
         # -------------------
         #  DISTANCE ORDERING
         # -------------------
-        user_lat = request.GET.get("lat")
-        user_lng = request.GET.get("lng")
+        if request.user.is_authenticated:
+            user_value = request.user
+            user_profile = UserProfile.objects.get(user_id=user_value.id)
+            user_lat = user_profile.latitude
+            user_lng = user_profile.longitude
+        else:
+            user_lat = request.GET.get("lat")
+            user_lng = request.GET.get("lng")
 
+        if not user_lng or not user_lat:
+            return Response({"detail": "Lat & Lng not present"}, status=400)       
+         
         if user_lat and user_lng:
             user_lat = float(user_lat)
             user_lng = float(user_lng)
@@ -131,6 +158,8 @@ class StationListView(APIView):
                     qs = qs.order_by("-distance")
                 else:  # default or "asc"
                     qs = qs.order_by("distance")
+            elif order_by == None:
+                qs = qs.order_by("distance")  # Default ordering
 
         # -------------------
         #  FILTERS
@@ -151,6 +180,11 @@ class StationListView(APIView):
         if max_price:
             qs = qs.filter(fuelprices_set__price_per_liter__lte=max_price)
 
+        if order_by == "price" and hasattr(qs[0], "price_per_liter"):
+                if order == "desc":
+                    qs = qs.order_by("-price_per_liter")
+                else:  # default or "asc"
+                    qs = qs.order_by("price_per_liter")
         #  City filters
         city = request.GET.get("city")
         city_id = request.GET.get("city_id")
@@ -189,6 +223,14 @@ class StationListView(APIView):
                 "longitude": float(s.longitude),
                 "distance_km": round(s.distance, 2) if hasattr(s, "distance") else None,
                 "is_open": check_is_open(s),
+                "price": [
+                    {
+                        "fuel_type": fp.fuel_type.name,
+                        "price_per_liter": float(fp.price_per_liter),
+                        "last_updated": fp.last_updated,
+                    }
+                    for fp in s.fuelprices_set.all()
+                ],
                 "last_price_update": price_obj.last_updated if price_obj else None,
             })
 

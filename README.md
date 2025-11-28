@@ -1,20 +1,25 @@
 ## Project Structure
+```bash
 fuel_finder/
-├── fuel_finder_app/         # core app code
-├── fuel_finder_alert/       # alert / notification module
-├── fuel_finder_auth_user/   # auth / user management
-├── .env_sample              # sample environment variables
-├── requirements.txt
-├── manage.py                # main script / entrypoint
-├── README.md                # this file
-└── (other helper files/modules)
+├── fuel_finder_app/          # Core app code
+│   ├── management/           # Custom Django management commands
+│   └── scripts/              # Helper scripts (e.g., initial_data.py)
+├── fuel_finder_alert/        # Alert / notification module
+│   └── cron/                 # Scheduled tasks / cron jobs
+├── fuel_finder_auth_user/    # Authentication / user management module
+├── .env_sample               # Sample environment variables
+├── requirements.txt          # Python dependencies
+├── manage.py                 # Django management script / entrypoint
+├── README.md                 # Project documentation
+└── (other helper files/modules) # Utilities, config files, etc.
 
-## 🚀 Features
+```
+
+## Features
 
 ### 1. **User Authentication**
 
 * Handles **user registration**, login, and token-based authentication (JWT).
-* Supports custom claims like `user_id` and `email` in tokens.
 * User profile management including optional fields like address, gender, and location (`lat`/`lng`).
 
 ### 2. **Fuel Station Management**
@@ -72,23 +77,147 @@ fuel_finder/
 * `.env_sample` for environment variables such as:
 
   * Database connection
-  * API keys (if any)
-  * Scheduler intervals
+  
 
-### 9. **Extensible Architecture**
 
-* Designed for easy extension:
 
-  * Add new **fuel types** or **amenities**
-  * Add new **alert types**
-  * Extend APIs with extra fields
+## Installed Packages & Purpose
+| Package                      | Purpose                           | When You Use It                |
+| ---------------------------- | --------------------------------- | ------------------------------ |
+| **rest_framework**           | Build APIs in Django              | All API development            |
+| **rest_framework_simplejwt** | JWT authentication                | Secure login, token-based auth |
+| **django_extensions**        | Developer utilities               | Local development, debugging   |
+| **drf_spectacular**          | API documentation auto-generation | Creating Swagger/OpenAPI docs  |
+| **drf_spectacular_sidecar**  | Local API documentation assets    | Offline Swagger/Redoc support  |
+
+
+## API Documentation
+
+The project includes automatic API documentation generated using DRF-Spectacular (OpenAPI 3).
+
+## Available API Docs
+| Type                      | URL            | Description                                          |
+| ------------------------- | -------------- | ---------------------------------------------------- |
+| **OpenAPI Schema (JSON)** | `/api/schema/` | The full OpenAPI 3 schema used by Swagger & ReDoc    |
+| **Swagger UI**            | `/api/docs/`   | Interactive API explorer with authentication support |
+| **ReDoc UI**              | `/api/redoc/`  | Clean, responsive API documentation for developers   |
+
+
+
+# Project Setup Guide – Fuel Finder
+
+## 1. Create & Activate Virtual Environment (venv)
+
+### **Windows**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### **macOS / Linux**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Install Requirements
+
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-If you want, I can **rewrite the full README** including this **Features section**, **installation**, **usage**, **project structure**, and **example API calls** — so it’s ready to drop into the repo.
+## 2. Environment Variables
 
-Do you want me to do that next?
+Create a `.env` file in the project root:
 
-docker-compose down -v
+```
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=db
+DB_PORT=5432
+
+POSTGRES_PASSWORD=
+POSTGRES_DB=
+POSTGRES_USER=
+DEBUG=True
+```
+
+---
+
+##  3. Database Setup (Local)
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+##  4. Initial data setup
+
+```bash
+python manage.py runscript initial_data
+
+```
+
+##  5. Truncate all data
+
+```bash
+ python manage.py truncate_db
+```
+
+## 6. Run the Project Locally
+
+```bash
+python manage.py runserver
+```
+
+Static files (only when deploying):
+
+```bash
+python manage.py collectstatic
+```
+
+---
+
+#  Docker Setup
+
+##  1. Build Docker Images
+
+```bash
 docker-compose build --no-cache
+```
+
+##  2. Start Containers
+
+```bash
 docker-compose up
+```
+
+Run in background:
+
+```bash
+docker-compose up -d
+```
+
+##  3. Stop Containers
+
+```bash
+docker-compose down
+```
+
+Remove volumes ( deletes DB data!):
+
+```bash
+docker-compose down -v
+```
+
+truncate all existing data from db
+
+```bash
+docker compose up -d
+docker compose exec web python manage.py truncate_db
+```
