@@ -12,6 +12,8 @@ from .models import FuelStations,  FuelPrices
 from django.db.models.expressions import RawSQL
 from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 def check_is_open(station):
     now = datetime.now()
@@ -28,6 +30,7 @@ def check_is_open(station):
 
 class StationDetailView(APIView):
     permission_classes = [AllowAny]
+    @method_decorator(cache_page(60 * 5))  # Cache for 5 minutes
     @extend_schema(
     responses=StationDetailSerializer
     )
@@ -48,9 +51,9 @@ class StationDetailView(APIView):
                 "price_per_liter": float(fp.price_per_liter),
                 "last_updated": fp.last_updated,
             }
-            for fp in station.fuelprices_set.all()
+            for fp in station.fuelprices_set.select_related("fuel_type").all()
         ]
-        price_history = FuelPrices.objects.filter(fuel_station_id=station).order_by('-last_updated')
+        price_history = FuelPrices.objects.select_related("fuel_type").filter(fuel_station=station).order_by('-last_updated')
         price_history_detail = [
             {
                 "fuel_type": fph.fuel_type.name,
@@ -87,6 +90,7 @@ class StationDetailView(APIView):
 
 class StationListView(APIView):
     permission_classes = [AllowAny]
+    @method_decorator(cache_page(60 * 5))  # Cache for 5 minutes
     @extend_schema(
     parameters=[
         OpenApiParameter(name='lat', type=float, location='query', description='User latitude'),
@@ -215,7 +219,7 @@ class StationListView(APIView):
         # -------------------
         stations = []
         for s in paginated_qs:
-            price_obj = s.fuelprices_set.first()
+            price_obj = s.fuelprices_set.select_related("fuel_type").first()
 
             stations.append({
                 "id": s.id,
@@ -231,7 +235,7 @@ class StationListView(APIView):
                         "price_per_liter": float(fp.price_per_liter),
                         "last_updated": fp.last_updated,
                     }
-                    for fp in s.fuelprices_set.all()
+                    for fp in s.fuelprices_set.select_related("fuel_type").all()
                 ],
                 "last_price_update": price_obj.last_updated if price_obj else None,
             })
