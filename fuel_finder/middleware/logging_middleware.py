@@ -26,7 +26,7 @@ class APILoggerMiddleware:
 
         logger.info(
             f"[REQUEST] {method} {path} | "
-            f"Query={query_params} | Body={body_json}"
+            f"TimeStamp={datetime.datetime.now()}s"
         )
 
         # ---------- RESPONSE ----------
@@ -43,7 +43,7 @@ class APILoggerMiddleware:
             f"[RESPONSE] {method} {path} | "
             f"Status={response.status_code} | "
             f"ExecutionTime={execution_time}s"
-              f"TimeStamp={datetime.datetime.now()}s"
+            f"TimeStamp={datetime.datetime.now()}s"
         )
 
         return response
